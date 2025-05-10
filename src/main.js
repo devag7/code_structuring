@@ -1,18 +1,36 @@
+class Robot {
+  constructor(name, legs) {
+    this.name = name;
+    this.legs = legs;
+    console.log(`I am ${name}`);
+  }
+  sayHi() {
+    console.log(`Hello! My name is ${this.name}`);
+  }
+}
+
+const wallE = new Robot("Wall-E", 0);
+const ultron = new Robot("Ultron", 2);
+const astroBoy = new Robot("AstroBoy", 2);
+
+ultron.sayHi();
+
+/*
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-/**
+/!**
  * Loaders
- */
+ *!/
 const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 
-/**
+/!**
  * Base
- */
+ *!/
 // Debug
 const gui = new GUI();
 const debugObject = {};
@@ -23,9 +41,9 @@ const canvas = document.querySelector("canvas.webgl");
 // Scene
 const scene = new THREE.Scene();
 
-/**
+/!**
  * Update all materials
- */
+ *!/
 const updateAllMaterials = () => {
   scene.traverse((child) => {
     if (
@@ -41,9 +59,9 @@ const updateAllMaterials = () => {
   });
 };
 
-/**
+/!**
  * Environment map
- */
+ *!/
 const environmentMap = cubeTextureLoader.load([
   "/textures/environmentMap/px.jpg",
   "/textures/environmentMap/nx.jpg",
@@ -66,9 +84,9 @@ gui
   .step(0.001)
   .onChange(updateAllMaterials);
 
-/**
+/!**
  * Models
- */
+ *!/
 let foxMixer = null;
 
 gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
@@ -85,9 +103,9 @@ gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
   updateAllMaterials();
 });
 
-/**
+/!**
  * Floor
- */
+ *!/
 const floorColorTexture = textureLoader.load("textures/dirt/color.jpg");
 floorColorTexture.colorSpace = THREE.SRGBColorSpace;
 floorColorTexture.repeat.set(1.5, 1.5);
@@ -108,9 +126,9 @@ const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.rotation.x = -Math.PI * 0.5;
 scene.add(floor);
 
-/**
+/!**
  * Lights
- */
+ *!/
 const directionalLight = new THREE.DirectionalLight("#ffffff", 4);
 directionalLight.castShadow = true;
 directionalLight.shadow.camera.far = 15;
@@ -144,9 +162,9 @@ gui
   .step(0.001)
   .name("lightZ");
 
-/**
+/!**
  * Sizes
- */
+ *!/
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
@@ -166,9 +184,9 @@ window.addEventListener("resize", () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
-/**
+/!**
  * Camera
- */
+ *!/
 // Base camera
 const camera = new THREE.PerspectiveCamera(
   35,
@@ -183,9 +201,9 @@ scene.add(camera);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-/**
+/!**
  * Renderer
- */
+ *!/
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
   antialias: true,
@@ -198,9 +216,9 @@ renderer.setClearColor("#211d20");
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-/**
+/!**
  * Animate
- */
+ *!/
 const clock = new THREE.Clock();
 let previousTime = 0;
 
@@ -225,3 +243,4 @@ const tick = () => {
 };
 
 tick();
+*/

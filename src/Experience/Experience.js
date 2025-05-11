@@ -14,10 +14,19 @@ export default class Experience {
     this.time = new Time();
 
     // console.log(this.sizes.width);
+
+    // Sizes resize event
     this.sizes.on("resize", () => {
       // console.log("I heard a resize");
       this.resize();
     });
+
+    // Time tick event
+    this.time.on("tick", () => {
+      this.update();
+    });
   }
   resize() {}
+
+  update() {}
 }

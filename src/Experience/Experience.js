@@ -37,7 +37,11 @@ export default class Experience {
       this.update();
     });
   }
-  resize() {}
+  resize() {
+    this.camera.resize();
+  }
 
-  update() {}
+  update() {
+    this.camera.update();
+  }
 }

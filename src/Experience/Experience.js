@@ -3,8 +3,15 @@ import Time from "../Utils/Time.js";
 import * as THREE from "three";
 import Camera from "./Camera.js";
 
+let instance = null;
 export default class Experience {
+  instance = this;
   constructor(canvas) {
+    if (instance) {
+      return instance;
+    }
+    instance = this;
+
     // Global access
     window.experience = this; // access from console
 

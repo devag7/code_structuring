@@ -9,9 +9,27 @@ class Robot {
   }
 }
 
+class FlyingRobot extends Robot {
+  constructor(name, legs) {
+    super(name, legs);
+  }
+  sayHi() {
+    console.log("something else");
+  }
+
+  takeOff() {
+    console.log(`Have a good flight ${this.name}`);
+  }
+  land() {
+    console.log(`Welcome back ${this.name}`);
+  }
+}
+
 const wallE = new Robot("Wall-E", 0);
-const ultron = new Robot("Ultron", 2);
-const astroBoy = new Robot("AstroBoy", 2);
+const ultron = new FlyingRobot("Ultron", 2);
+const astroBoy = new FlyingRobot("AstroBoy", 2);
+
+astroBoy.takeOff();
 
 ultron.sayHi();
 

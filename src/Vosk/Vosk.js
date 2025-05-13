@@ -1,11 +1,22 @@
 import { createModel } from "vosk-browser";
 import backend from "three/src/renderers/common/Backend.js";
+import Recognizer from "./Recognizer.js";
+
+let instance = null;
 
 export default class Vosk {
   constructor() {
+    // Singleton
+    if (instance) {
+      return instance;
+    }
+    instance = this;
+
     this.createModel = null;
     this.streamMedia = null;
     this.lastWord = null;
+
+    this.test = new Recognizer();
 
     // Setup
     //this.setModel();

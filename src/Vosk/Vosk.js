@@ -16,26 +16,26 @@ export default class Vosk {
     this.streamMedia = null;
     this.lastWord = null;
 
-    this.test = new Recognizer();
-
     // Setup
-    //this.setModel();
+    this.setModel();
+    this.test = new Recognizer();
   }
 
   async setModel() {
-    this.createModel = await createModel(
+    this.model = await createModel(
       "/vosk/model/vosk-model-small-pt-0.3.tar.gz",
       { worker: { backend: "memory" } },
     );
 
-    this.rec = new this.createModel.KaldiRecognizer(
+    await this.test.getModel(); // FINALLY
+    this.rec = new this.model.KaldiRecognizer(
       16000,
       `["pala", "ca","placa","deletar", "[unk]"]`,
     );
     // console.log(this.rec);
-    console.log(this.createModel);
-    console.log(this.createModel.recognizers.entries());
-    for (const [key, value] of this.createModel.recognizers.entries()) {
+    console.log(this.model);
+    console.log(this.model.recognizers.entries());
+    for (const [key, value] of this.model.recognizers.entries()) {
       console.log(`Key: ${key}, Value:`, value);
     }
     this.rec.on("result", (result) => {

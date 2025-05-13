@@ -4,7 +4,7 @@ import Vosk from "./Vosk/Vosk.js";
 const experience = new Experience(document.querySelector("canvas.webgl"));
 
 const vosk = new Vosk();
-await vosk.setModel();
+// await vosk.setModel();
 // await vosk.stream();
 
 /*

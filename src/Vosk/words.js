@@ -9,6 +9,6 @@ export default [
     word: "flecha",
     syllables: ["fle", "cha"],
     say: ["fele", "cha"],
-    wrong: ["fecha", "frecha", "fe", "fre"],
+    wrong: ["fecha", "frecha", "fé", "fre"],
   },
 ];

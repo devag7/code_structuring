@@ -1,6 +1,7 @@
 import { createModel } from "vosk-browser";
 import backend from "three/src/renderers/common/Backend.js";
 import Recognizer from "./Recognizer.js";
+import words from "./words.js";
 
 let instance = null;
 
@@ -16,6 +17,7 @@ export default class Vosk {
     this.streamMedia = null;
     this.lastWord = null;
     this.rec = null;
+    this.words = words;
 
     // Setup
     this.setModel();
@@ -28,18 +30,23 @@ export default class Vosk {
       { worker: { backend: "memory" } },
     );
 
-    await this.test.getModel(); // FINALLY
+    await this.test.getModel().then(() => {
+      this.test.createRecognizer(this.words);
+
+      this.rec = this.test.recognizer;
+
+      this.rec.on("result", (result) => {
+        console.log(`Result: ${result.result.text}`);
+        this.lastWord = result.result.text;
+
+        if (this.lastWord === "deletar") {
+          this.removeKaldi();
+        }
+      });
+    }); // FINALLY
     // this.test.createRecognizer(); // SHIT
-    this.rec = await this.test.recognizer;
+    // this.rec = await this.test.recognizer;
 
-    this.rec.on("result", (result) => {
-      console.log(`Result: ${result.result.text}`);
-      this.lastWord = result.result.text;
-
-      if (this.lastWord === "deletar") {
-        this.removeKaldi();
-      }
-    });
     /*
 
     this.rec = new this.model.KaldiRecognizer(

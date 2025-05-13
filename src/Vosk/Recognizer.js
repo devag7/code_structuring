@@ -29,19 +29,22 @@ export default class Recognizer {
   createRecognizer(sources) {
     /*this.grammar = `'[','placa', 'pala', 'ca', 'bala', 'paca' , ']'`; // sorry, backticks because of my prettier*/
     this.sources = sources;
-    for (const obj of sources) {
-      const grammar = JSON.stringify([
-        ...new Set([...obj.say, ...obj.wrong, obj.word, "[unk]"]),
-      ]);
-      this.recognizer = new this.model.KaldiRecognizer(16000, grammar);
-    }
+    const grammarArr = [
+      ...sources.say,
+      ...sources.wrong,
+      sources.word,
+      "[unk]", // fallback para ruído
+    ];
+    const grammar = JSON.stringify([...new Set(grammarArr)]);
 
+    // this.recognizer?.remove();
+    this.recognizer = new this.model.KaldiRecognizer(16000, grammar);
     /*
-   this.grammar = JSON.stringify(["placa", "pala", "ca", "bala", "paca"]);
-    console.log(this.model); // SEEMS LIKE I DON'T NEED TO MAKE THIS ASYNC
-    console.log(this.vosk); // FORGET IT
-    console.log(this);
-    this.recognizer = new this.model.KaldiRecognizer(16000, this.grammar);
-    */
+     this.grammar = JSON.stringify(["placa", "pala", "ca", "bala", "paca"]);
+      console.log(this.model); // SEEMS LIKE I DON'T NEED TO MAKE THIS ASYNC
+      console.log(this.vosk); // FORGET IT
+      console.log(this);
+      this.recognizer = new this.model.KaldiRecognizer(16000, this.grammar);
+      */
   }
 }

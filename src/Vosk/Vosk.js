@@ -2,11 +2,14 @@ import { createModel } from "vosk-browser";
 import backend from "three/src/renderers/common/Backend.js";
 import Recognizer from "./Recognizer.js";
 import words from "./words.js";
+import EventEmitter from "../Utils/EventEmitter.js";
+import Fox from "../World/Fox.js";
 
 let instance = null;
 
-export default class Vosk {
+export default class Vosk extends EventEmitter {
   constructor() {
+    super();
     // Singleton
     if (instance) {
       return instance;
@@ -31,7 +34,10 @@ export default class Vosk {
     );
 
     await this.test.getModel().then(() => {
-      this.test.createRecognizer(this.words);
+      // FIRST REC
+      this.test.createRecognizer(this.words[0]);
+
+      console.log(this.words[0]);
 
       this.rec = this.test.recognizer;
 
@@ -39,10 +45,31 @@ export default class Vosk {
         console.log(`Result: ${result.result.text}`);
         this.lastWord = result.result.text;
 
-        if (this.lastWord === "deletar") {
-          this.removeKaldi();
+        /*
+         * norm is AI GENERATED!!!!! Used to remove accent and have lowercase. The conditional is also AI GENERATED!!!!! (I still think it is quite a mess, so maybe i should re structure it later
+         * */
+        const norm = (str) =>
+          str
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+        if (
+          this.words.some(({ say }) =>
+            say.some((s) => norm(s) === norm(this.lastWord)),
+          )
+        ) {
+          // this.removeKaldi()
+          console.log("Great progress!!!!!!");
+
+          this.trigger("onCorrectSay");
+        } else if (
+          this.words.some(({ word }) => norm(word) === norm(this.lastWord))
+        ) {
+          this.trigger("onCorrectWord");
         }
       });
+      this.stream();
     }); // FINALLY
     // this.test.createRecognizer(); // SHIT
     // this.rec = await this.test.recognizer;

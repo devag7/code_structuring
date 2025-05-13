@@ -3,7 +3,7 @@ export default [
     word: "placa",
     syllables: ["pla", "ca"],
     say: ["pala", "ca"],
-    wrong: ["bala", "bla"],
+    wrong: ["pele", "bla"],
   },
   {
     word: "flecha",

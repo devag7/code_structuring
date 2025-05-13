@@ -5,9 +5,10 @@ export default class Vosk {
   constructor() {
     this.createModel = null;
     this.streamMedia = null;
+    this.lastWord = null;
 
     // Setup
-    this.setModel();
+    //this.setModel();
   }
 
   async setModel() {
@@ -18,11 +19,32 @@ export default class Vosk {
 
     this.rec = new this.createModel.KaldiRecognizer(
       16000,
-      `["pala", "ca","placa", "[unk]"]`,
+      `["pala", "ca","placa","deletar", "[unk]"]`,
     );
+    // console.log(this.rec);
+    console.log(this.createModel);
+    console.log(this.createModel.recognizers.entries());
+    for (const [key, value] of this.createModel.recognizers.entries()) {
+      console.log(`Key: ${key}, Value:`, value);
+    }
     this.rec.on("result", (result) => {
       console.log(`Result: ${result.result.text}`);
+      this.lastWord = result.result.text;
+
+      if (this.lastWord === "deletar") {
+        this.removeKaldi();
+      }
     });
+  }
+
+  removeKaldi() {
+    console.log("tata");
+    /*
+    this.rec.remove(); // WRONG, SEE clg this.createModel (right) and this.rec (wrong)
+*/
+    for (const [key, value] of this.createModel.recognizers.entries()) {
+      console.log(`Key: ${key}, Value:`, value);
+    }
   }
 
   async stream() {

@@ -19,7 +19,7 @@ export default class Fox extends EventEmitter {
     this.vosk = new Vosk();
 
     this.setFox();
-    this.setAnimation(1);
+    this.setAnimation(0);
     this.time = this.expericence.time;
   }
   setFox() {
@@ -50,14 +50,14 @@ export default class Fox extends EventEmitter {
     this.animation.action = this.animation.mixer.clipAction(
       this.fox.animations[this.number],
     );
-    console.log(this.fox.animations);
+    // console.log(this.fox.animations);
     this.animation.action.play();
     this.vosk.on("onCorrectSay", () => {
-      this.number = 1;
+      this.setAnimation(1);
     });
     this.vosk.on("onCorrectWord", () => {
       console.log("fox on animation 0");
-      this.setAnimation(0);
+      this.setAnimation(2);
     });
   }
   update() {

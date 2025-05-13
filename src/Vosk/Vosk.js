@@ -15,6 +15,7 @@ export default class Vosk {
     this.createModel = null;
     this.streamMedia = null;
     this.lastWord = null;
+    this.rec = null;
 
     // Setup
     this.setModel();
@@ -28,6 +29,19 @@ export default class Vosk {
     );
 
     await this.test.getModel(); // FINALLY
+    // this.test.createRecognizer(); // SHIT
+    this.rec = await this.test.recognizer;
+
+    this.rec.on("result", (result) => {
+      console.log(`Result: ${result.result.text}`);
+      this.lastWord = result.result.text;
+
+      if (this.lastWord === "deletar") {
+        this.removeKaldi();
+      }
+    });
+    /*
+
     this.rec = new this.model.KaldiRecognizer(
       16000,
       `["pala", "ca","placa","deletar", "[unk]"]`,
@@ -46,6 +60,7 @@ export default class Vosk {
         this.removeKaldi();
       }
     });
+*/
   }
 
   removeKaldi() {

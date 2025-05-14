@@ -1,9 +1,7 @@
 import { createModel } from "vosk-browser";
-import backend from "three/src/renderers/common/Backend.js";
 import Recognizer from "./Recognizer.js";
 import words from "./words.js";
 import EventEmitter from "../Utils/EventEmitter.js";
-import Fox from "../World/Fox.js";
 
 let instance = null;
 
@@ -37,7 +35,8 @@ export default class Vosk extends EventEmitter {
       // FIRST REC
       this.test.createRecognizer(this.words[0]);
 
-      console.log(this.words[0]);
+      console.log(this.words);
+      this.answer = this.words[0].word;
 
       this.rec = this.test.recognizer;
 
@@ -54,22 +53,29 @@ export default class Vosk extends EventEmitter {
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "");
 
+        const tokens = norm(this.lastWord).split(/\s+/);
+
         if (
           this.words.some(({ say }) =>
-            say.some((s) => norm(s) === norm(this.lastWord)),
+            tokens.some((t) => say.some((s) => norm(s) === t)),
           )
         ) {
           // this.removeKaldi()
           console.log("Great progress!!!!!!");
 
           this.trigger("onCorrectSay");
-        } else if (
-          this.words.some(({ word }) => norm(word) === norm(this.lastWord))
-        ) {
+        } else if (this.words.some(({ word }) => tokens.includes(norm(word)))) {
           this.trigger("onCorrectWord");
         }
       });
       this.stream();
+
+      /*      this.on("onCorrectWord", () => {
+        if (this.answer === "placa") {
+          this.rec.remove();
+          this.test.createRecognizer(this.words[1]);
+        }
+      });*/
     }); // FINALLY
     // this.test.createRecognizer(); // SHIT
     // this.rec = await this.test.recognizer;

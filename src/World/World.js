@@ -48,8 +48,10 @@ export default class World {
         y: "+=3",
         z: "+=2",
       });
-      this.text.setNewText(this.vosk.words[1].word);
-      console.log(this.vosk.words[1]);
+      this.text.setNewText(
+        this.vosk.words[this.vosk.currentWordIndex + 1].word,
+      ); // KNOWN BUG: This happens before the currentWorldIndex is updated inside Vosk, another way to solve would be updating it here. I guess the best of all Would be on a Update from Experience, maybe on another refactor where I correct the places and order of the instances
+      console.log(this.vosk.words[this.vosk.currentWordIndex].word);
       console.log(this.text);
     });
 

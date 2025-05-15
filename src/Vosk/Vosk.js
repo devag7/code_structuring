@@ -20,6 +20,9 @@ export default class Vosk extends EventEmitter {
     this.rec = null;
     this.words = words;
 
+    this.totalWords = this.words.length - 1;
+    this.currentWordIndex = 0;
+
     // Setup
     this.setModel();
     this.test = new Recognizer();
@@ -33,7 +36,7 @@ export default class Vosk extends EventEmitter {
 
     await this.test.getModel().then(() => {
       // FIRST REC
-      this.test.createRecognizer(this.words[0]);
+      this.test.createRecognizer(this.words[this.currentWordIndex]);
 
       console.log(this.words);
       this.answer = this.words[0].word;
@@ -62,8 +65,13 @@ export default class Vosk extends EventEmitter {
           this.trigger("onCorrectSay");
         } else if (this.words.some(({ word }) => tokens.includes(norm(word)))) {
           this.trigger("onCorrectWord");
-          this.test.stopResult();
-          this.test.createRecognizer(this.words[1]);
+          this.test.stopResult(); // I don't think it is working 100% (as it keeps getting results on the last Right word)
+
+          if (this.currentWordIndex < this.totalWords) {
+            this.currentWordIndex++;
+          }
+
+          this.test.createRecognizer(this.words[this.currentWordIndex]); // Damn, just noticed: Explanation to the comment above: i then create the rec again, so it will keep going, if I need to really stop, I think I will put it inside the if above and add something like else{CLG 'Congratulations'}
           this.test.getResult();
         }
       });

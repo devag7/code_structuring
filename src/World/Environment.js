@@ -1,5 +1,6 @@
 import Experience from "../Experience/Experience.js";
 import * as THREE from "three";
+import { GroundedSkybox } from "three/addons";
 
 export default class Environment {
   constructor() {
@@ -8,7 +9,8 @@ export default class Environment {
     this.resources = this.experience.resources;
 
     this.setSunLight();
-    this.setEnvironmentMap();
+    // this.setEnvironmentMap();
+    this.setGroundedEnvironmentMap();
   }
 
   setSunLight() {
@@ -30,6 +32,7 @@ export default class Environment {
     this.environmentMap.texture.colorSpace = THREE.SRGBColorSpace;
 
     this.scene.environment = this.environmentMap.texture;
+    // this.scene.background = this.environmentMap.texture;
 
     this.environmentMap.updateMaterial = () => {
       this.scene.traverse((child) => {
@@ -45,5 +48,19 @@ export default class Environment {
       });
     };
     this.environmentMap.updateMaterial();
+  }
+
+  setGroundedEnvironmentMap() {
+    this.groundedEnvironmentMap = this.resources.items.groundEnvMap;
+    this.groundedEnvironmentMap.intensity = 0.4;
+
+    this.groundedEnvironmentMap.mapping =
+      THREE.EquirectangularReflectionMapping;
+    this.scene.environment = this.groundedEnvironmentMap;
+
+    const skyBox = new GroundedSkybox(this.groundedEnvironmentMap, 15, 70);
+    // skyBox.material.wireframe = true;
+    skyBox.position.y = 15;
+    this.scene.add(skyBox);
   }
 }

@@ -1,5 +1,10 @@
 import EventEmitter from "./EventEmitter.js";
-import { FontLoader, GLTFLoader } from "three/addons";
+import {
+  FontLoader,
+  GLTFLoader,
+  GroundedSkybox,
+  RGBELoader,
+} from "three/addons";
 import * as THREE from "three";
 
 export default class Resources extends EventEmitter {
@@ -22,6 +27,7 @@ export default class Resources extends EventEmitter {
     this.loaders.textureLoader = new THREE.TextureLoader();
     this.loaders.cubeTextureLoader = new THREE.CubeTextureLoader();
     this.loaders.fontLoader = new FontLoader();
+    this.loaders.rgbeLoader = new RGBELoader();
   }
 
   startLoading() {
@@ -36,6 +42,10 @@ export default class Resources extends EventEmitter {
         });
       } else if (source.type === "cubeTexture") {
         this.loaders.cubeTextureLoader.load(source.path, (file) => {
+          this.sourceLoaded(source, file);
+        });
+      } else if (source.type === "rgbeTexture") {
+        this.loaders.rgbeLoader.load(source.path, (file) => {
           this.sourceLoaded(source, file);
         });
       } else if (source.type === "font") {

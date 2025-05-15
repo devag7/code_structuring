@@ -28,4 +28,9 @@ export default [
     type: "font",
     path: "fonts/helvetiker_regular.typeface.json",
   },
+  {
+    name: "groundEnvMap",
+    type: "rgbeTexture",
+    path: "textures/environmentMap/1.hdr",
+  },
 ];

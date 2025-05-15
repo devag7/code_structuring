@@ -22,4 +22,10 @@ export default [
     path: "textures/dirt/normal.jpg",
   },
   { name: "foxModel", type: "GLTFLoader", path: "models/Fox/glTF/Fox.gltf" },
+  { name: "matcapTexture", type: "texture", path: "textures/matcaps/8.png" },
+  {
+    name: "font",
+    type: "font",
+    path: "fonts/helvetiker_regular.typeface.json",
+  },
 ];

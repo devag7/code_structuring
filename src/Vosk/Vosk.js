@@ -38,15 +38,11 @@ export default class Vosk extends EventEmitter {
       console.log(this.words);
       this.answer = this.words[0].word;
 
-      this.rec = this.test.recognizer;
+      this.test.getResult();
+      this.test.on("onUpdateLastWord", () => {
+        console.log("Got update from Recognizer");
+        this.lastWord = this.test.lastWord;
 
-      this.rec.on("result", (result) => {
-        console.log(`Result: ${result.result.text}`);
-        this.lastWord = result.result.text;
-
-        /*
-         * norm is AI GENERATED!!!!! Used to remove accent and have lowercase. The conditional is also AI GENERATED!!!!! (I still think it is quite a mess, so maybe i should re structure it later
-         * */
         const norm = (str) =>
           str
             .toLowerCase()
@@ -66,9 +62,19 @@ export default class Vosk extends EventEmitter {
           this.trigger("onCorrectSay");
         } else if (this.words.some(({ word }) => tokens.includes(norm(word)))) {
           this.trigger("onCorrectWord");
+          this.test.stopResult();
+          this.test.createRecognizer(this.words[1]);
+          this.test.getResult();
         }
       });
-      this.stream();
+
+      /*
+       * norm is AI GENERATED!!!!! Used to remove accent and have lowercase. The conditional is also AI GENERATED!!!!! (I still think it is quite a mess, so maybe i should re structure it later
+       * */
+
+      // this.stream();
+
+      this.test.startStream();
 
       /*      this.on("onCorrectWord", () => {
         if (this.answer === "placa") {

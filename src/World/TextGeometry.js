@@ -13,6 +13,7 @@ export default class TextGeo {
     this.textGeometry = null;
     this.matcapTexture = null;
     this.textMaterial = null;
+    this.textTarget = null;
     this.scene = this.experience.scene;
 
     this.setTextGeometry();
@@ -21,12 +22,17 @@ export default class TextGeo {
   }
   setNewText(newText) {
     this.text = newText;
-    if (this.textGeometry) {
+    if (!this.textTarget) {
       this.textTarget = new THREE.Mesh(this.textGeometry, this.textMaterial);
       this.textTarget.position.set(-3, 1, 0);
       this.scene.add(this.textTarget);
     } else {
+      this.textGeometry.dispose();
+      this.scene.remove(this.textTarget);
+
+      this.setTextGeometry();
       this.textTarget = new THREE.Mesh(this.textGeometry, this.textMaterial);
+      this.textTarget.position.set(-3, 1, 0);
       this.scene.add(this.textTarget);
     }
   }

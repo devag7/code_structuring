@@ -5,6 +5,8 @@ import Floor from "./Floor.js";
 import Vosk from "../Vosk/Vosk.js";
 import { gsap } from "gsap";
 import Fox from "./Fox.js";
+import TextGeo from "./TextGeometry.js";
+// import words from "../Vosk/words.js"; // unnecessary since i can get it from Vosk, but it just shows how much of a mess i made on this last part
 
 export default class World {
   constructor() {
@@ -29,6 +31,14 @@ export default class World {
         ease: "power2.inOut",
         y: "+=1",
       });
+
+      // Careful here, i think I can change the text in this, but I would need to make sure that the TextGeo was created before the onCorrectSay happens, since (for now) the World is created before Vosk i think it is safe
+
+      gsap.to(this.text.textTarget.rotation, {
+        duration: 1.5,
+        ease: "power2.inOut",
+        x: "-=6.29",
+      });
     });
     this.vosk.on("onCorrectWord", () => {
       gsap.to(testMesh.rotation, {
@@ -38,6 +48,9 @@ export default class World {
         y: "+=3",
         z: "+=2",
       });
+      this.text.setNewText(this.vosk.words[1].word);
+      console.log(this.vosk.words[1]);
+      console.log(this.text);
     });
 
     this.scene.add(testMesh);
@@ -51,6 +64,8 @@ export default class World {
       // Still on test (may be game)
       this.fox = new Fox();
       this.fox.on("onAnimateFox", () => {});
+
+      this.text = new TextGeo("placa");
     });
   }
   update() {

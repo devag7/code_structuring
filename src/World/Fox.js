@@ -32,7 +32,7 @@ export default class Fox extends EventEmitter {
       this.scene.add(child);
     }*/
 
-    this.fox.scene.scale.set(0.015, 0.015, 0.015);
+    this.fox.scene.scale.set(0.03, 0.03, 0.03);
     this.fox.scene.position.x = 2;
 
     this.fox.scene.traverse((child) => {

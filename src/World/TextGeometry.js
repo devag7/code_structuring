@@ -24,7 +24,8 @@ export default class TextGeo {
     this.text = newText;
     if (!this.textTarget) {
       this.textTarget = new THREE.Mesh(this.textGeometry, this.textMaterial);
-      this.textTarget.position.set(-3, 1, 0);
+      this.textTarget.position.set(-4, 1, 0);
+      this.textTarget.scale.set(2, 2, 2);
       this.scene.add(this.textTarget);
     } else {
       this.textGeometry.dispose();
@@ -32,7 +33,8 @@ export default class TextGeo {
 
       this.setTextGeometry();
       this.textTarget = new THREE.Mesh(this.textGeometry, this.textMaterial);
-      this.textTarget.position.set(-3, 1, 0);
+      this.textTarget.position.set(-4, 1, 0);
+      this.textTarget.scale.set(2, 2, 2);
       this.scene.add(this.textTarget);
     }
   }

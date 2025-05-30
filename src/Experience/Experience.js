@@ -56,4 +56,79 @@ export default class Experience {
     this.world.update();
     this.renderer.update();
   }
+
+  destroy() {
+    // Clean up event listeners first
+    this.sizes.off("resize");
+    this.time.off("tick");
+    
+    // Destroy utility classes
+    if (this.sizes) {
+      this.sizes.destroy();
+      this.sizes = null;
+    }
+    
+    if (this.time) {
+      this.time.destroy();
+      this.time = null;
+    }
+    
+    // Clean up Three.js resources
+    if (this.world) {
+      if (typeof this.world.destroy === 'function') {
+        this.world.destroy();
+      }
+      this.world = null;
+    }
+    
+    if (this.renderer) {
+      if (typeof this.renderer.destroy === 'function') {
+        this.renderer.destroy();
+      }
+      this.renderer = null;
+    }
+    
+    if (this.camera) {
+      if (typeof this.camera.destroy === 'function') {
+        this.camera.destroy();
+      }
+      this.camera = null;
+    }
+    
+    if (this.resources) {
+      if (typeof this.resources.destroy === 'function') {
+        this.resources.destroy();
+      }
+      this.resources = null;
+    }
+    
+    // Dispose of Three.js scene
+    if (this.scene) {
+      this.scene.traverse((child) => {
+        if (child.geometry) {
+          child.geometry.dispose();
+        }
+        if (child.material) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(material => material.dispose());
+          } else {
+            child.material.dispose();
+          }
+        }
+      });
+      this.scene.clear();
+      this.scene = null;
+    }
+    
+    // Clear canvas reference
+    this.canvas = null;
+    
+    // Clear global reference
+    if (window.experience === this) {
+      delete window.experience;
+    }
+    
+    // Reset singleton instance
+    instance = null;
+  }
 }

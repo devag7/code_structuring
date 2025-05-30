@@ -127,6 +127,40 @@ export default class Vosk extends EventEmitter {
     }
   }
 
+  destroy() {
+    // Clean up test recognizer
+    if (this.test) {
+      this.test.destroy();
+      this.test = null;
+    }
+    
+    // Clean up stream media
+    if (this.streamMedia) {
+      this.streamMedia.getTracks().forEach(track => track.stop());
+      this.streamMedia = null;
+    }
+    
+    // Clean up model recognizers
+    if (this.model && this.model.recognizers) {
+      for (const [key, value] of this.model.recognizers.entries()) {
+        if (value && typeof value.remove === 'function') {
+          value.remove();
+        }
+      }
+    }
+    
+    // Clear model reference
+    this.model = null;
+    this.createModel = null;
+    
+    // Clear all custom event callbacks
+    this.callbacks = {};
+    this.callbacks.base = {};
+    
+    // Reset singleton instance
+    instance = null;
+  }
+
   async stream() {
     this.streamMedia = await navigator.mediaDevices.getUserMedia({
       audio: {

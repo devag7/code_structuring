@@ -70,16 +70,51 @@ export default class Recognizer extends EventEmitter {
         noiseSuppression: true,
       },
     });
-    const ctx = new AudioContext({ sampleRate: 16000 });
-    const src = ctx.createMediaStreamSource(this.streamMedia);
-    const node = ctx.createScriptProcessor(4096, 1, 1);
-    node.onaudioprocess = (e) => {
+    this.ctx = new AudioContext({ sampleRate: 16000 });
+    this.src = this.ctx.createMediaStreamSource(this.streamMedia);
+    this.node = this.ctx.createScriptProcessor(4096, 1, 1);
+    this.node.onaudioprocess = (e) => {
       this.recognizer.acceptWaveform(e.inputBuffer);
     };
-    src.connect(node);
-    node.connect(ctx.destination);
+    this.src.connect(this.node);
+    this.node.connect(this.ctx.destination);
   }
+  
   stopResult() {
     this.recognizer.remove();
+  }
+
+  destroy() {
+    // Stop and clean up audio context and media stream
+    if (this.node) {
+      this.node.disconnect();
+      this.node.onaudioprocess = null;
+      this.node = null;
+    }
+    
+    if (this.src) {
+      this.src.disconnect();
+      this.src = null;
+    }
+    
+    if (this.ctx && this.ctx.state !== 'closed') {
+      this.ctx.close();
+      this.ctx = null;
+    }
+    
+    if (this.streamMedia) {
+      this.streamMedia.getTracks().forEach(track => track.stop());
+      this.streamMedia = null;
+    }
+    
+    // Clean up recognizer
+    if (this.recognizer) {
+      this.recognizer.remove();
+      this.recognizer = null;
+    }
+    
+    // Clear all custom event callbacks
+    this.callbacks = {};
+    this.callbacks.base = {};
   }
 }

@@ -35,4 +35,24 @@ export default class Camera {
   update() {
     this.controls.update();
   }
+
+  destroy() {
+    // Dispose orbit controls
+    if (this.controls) {
+      this.controls.dispose();
+      this.controls = null;
+    }
+    
+    // Remove camera from scene
+    if (this.scene && this.instance) {
+      this.scene.remove(this.instance);
+    }
+    
+    // Clear references
+    this.instance = null;
+    this.experience = null;
+    this.sizes = null;
+    this.scene = null;
+    this.canvas = null;
+  }
 }

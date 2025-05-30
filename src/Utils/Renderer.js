@@ -37,4 +37,18 @@ export default class Renderer {
   update() {
     this.instance.render(this.scene, this.camera.instance);
   }
+
+  destroy() {
+    if (this.instance) {
+      this.instance.dispose();
+      this.instance = null;
+    }
+    
+    // Clear references
+    this.experience = null;
+    this.canvas = null;
+    this.sizes = null;
+    this.scene = null;
+    this.camera = null;
+  }
 }

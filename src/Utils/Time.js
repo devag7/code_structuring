@@ -9,13 +9,18 @@ export default class Time extends EventEmitter {
     this.current = this.start;
     this.elapsed = 0;
     this.delta = 16;
+    this.isRunning = true;
+    this.animationFrameId = null;
 
     // Use this to wait a frame
-    window.requestAnimationFrame(() => {
+    this.animationFrameId = window.requestAnimationFrame(() => {
       this.tick();
     });
   }
+
   tick() {
+    if (!this.isRunning) return;
+    
     // console.log("tick");
     const currentTime = Date.now();
     this.delta = currentTime - this.current;
@@ -24,8 +29,22 @@ export default class Time extends EventEmitter {
 
     this.trigger("tick");
 
-    window.requestAnimationFrame(() => {
+    this.animationFrameId = window.requestAnimationFrame(() => {
       this.tick();
     });
+  }
+
+  destroy() {
+    // Stop the animation loop
+    this.isRunning = false;
+    
+    if (this.animationFrameId) {
+      window.cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+    
+    // Clear all custom event callbacks
+    this.callbacks = {};
+    this.callbacks.base = {};
   }
 }

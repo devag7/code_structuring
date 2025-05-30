@@ -83,4 +83,53 @@ export default class World {
       this.fox.update();
     }
   }
+
+  destroy() {
+    // Clean up Vosk event listeners first
+    if (this.vosk) {
+      this.vosk.off("onCorrectSay");
+      this.vosk.off("onCorrectWord");
+      this.vosk.destroy();
+      this.vosk = null;
+    }
+    
+    // Clean up world components
+    if (this.fox) {
+      if (typeof this.fox.destroy === 'function') {
+        this.fox.destroy();
+      }
+      this.fox = null;
+    }
+    
+    if (this.text) {
+      if (typeof this.text.destroy === 'function') {
+        this.text.destroy();
+      }
+      this.text = null;
+    }
+    
+    if (this.environment) {
+      if (typeof this.environment.destroy === 'function') {
+        this.environment.destroy();
+      }
+      this.environment = null;
+    }
+    
+    if (this.floor) {
+      if (typeof this.floor.destroy === 'function') {
+        this.floor.destroy();
+      }
+      this.floor = null;
+    }
+    
+    // Clean up resources event listeners
+    if (this.resources) {
+      this.resources.off("ready");
+    }
+    
+    // Clear references
+    this.experience = null;
+    this.scene = null;
+    this.resources = null;
+  }
 }

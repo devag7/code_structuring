@@ -174,4 +174,10 @@ export default class EventEmitter {
 
     return newName;
   }
+
+  destroy() {
+    // Clear all callbacks
+    this.callbacks = {};
+    this.callbacks.base = {};
+  }
 }

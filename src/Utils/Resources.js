@@ -63,4 +63,45 @@ export default class Resources extends EventEmitter {
       this.trigger("ready");
     }
   }
+
+  destroy() {
+    // Dispose of loaded resources
+    for (const itemName in this.items) {
+      const item = this.items[itemName];
+      
+      // Dispose of textures
+      if (item instanceof THREE.Texture) {
+        item.dispose();
+      }
+      
+      // Dispose of materials and geometries in GLTF scenes
+      if (item.scene) {
+        item.scene.traverse((child) => {
+          if (child.geometry) {
+            child.geometry.dispose();
+          }
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach(material => material.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        });
+      }
+    }
+    
+    // Clear items
+    this.items = {};
+    
+    // Clear loaders
+    this.loaders = {};
+    
+    // Clear sources
+    this.sources = null;
+    
+    // Clear all custom event callbacks
+    this.callbacks = {};
+    this.callbacks.base = {};
+  }
 }

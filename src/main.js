@@ -7,6 +7,28 @@ const vosk = new Vosk();
 // await vosk.setModel();
 // await vosk.stream();
 
+// Global cleanup function
+window.cleanup = () => {
+  if (vosk) {
+    vosk.destroy();
+  }
+  if (experience) {
+    experience.destroy();
+  }
+};
+
+// Add event listeners for page unload to clean up resources
+window.addEventListener('beforeunload', window.cleanup);
+window.addEventListener('pagehide', window.cleanup);
+
+// Optional: Add visibility change listener for when tab becomes hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // Optionally pause or cleanup when tab is hidden
+    console.log('Tab is hidden - consider pausing resources');
+  }
+});
+
 /*
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
